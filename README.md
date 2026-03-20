@@ -4,10 +4,37 @@
 FPlanck is a Python library for numerically solving the Fokker-Planck partial differential equation (also known as the Smoluchowski equation) in N dimensions using a matrix numerical method:
 
 <p align="center">
-  <img src="./img/fokker_planck.svg">
+  <img src="./img/fokker_planck.png" style="display:block;float:none;margin-left:auto;margin-right:auto;width:70%">
 </p>
 
 The method is based on the paper *"Physically consistent numerical solver for time-dependent Fokker-Planck equations"* by V. Holubec, K. Kroy, and S. Steffenoni, available on [arXiv](https://arxiv.org/pdf/1804.01285.pdf) and published in [APS](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.99.032117).
+
+----
+
+## This Fork
+
+### 1. Dimensionless parameter instantiation
+
+`FokkerPlanck` is extended with an explicit constructor-level mode switch for physical and dimensionless formulations, while preserving the original physical API as the default.
+
+At present, the main change is the introduction of:
+
+- `mode="physical"` as the default, preserving the original behaviour based on temperature and drag
+- `mode="dimensionless"` for scaled problems where the user supplies dimensionless transport data directly
+
+The work focused on the constructor contract and backward compatibility. In particular:
+
+- the default constructor path was verified to remain equivalent to the original physical formulation
+- dimensionless initialisation was added with sensible validation rules
+- new tests were added for physical-mode equivalence, dimensionless free diffusion, and dimensionless conservative potentials. See
+    ```text
+    tests\test_dimless_constructor.py
+    ```
+- the existing test suite was run successfully after these changes
+
+The aim is to support research workflows that are more naturally expressed in scaled variables, while keeping the original SI-based interface intact for general use.
+
+----
 
 ## Features
 + Declare external potentials (conservative) and force fields (non-conservative) in N-dimensions
